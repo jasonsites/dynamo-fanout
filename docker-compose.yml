@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  lambda-fanout:
+    build:
+      context: .
+      dockerfile: ./test/Dockerfile
+    command: npm run coverage
+    environment:
+      AWS_ACCESS_KEY_ID: xxxxxx
+      AWS_REGION: us-west-2
+      AWS_SECRET_ACCESS_KEY: xxxxxxxxxx
+      DYNAMO_TABLE_RESOURCE: test
+      KINESIS_FANOUT_RESOURCE_NAME: test
+      NODE_ENV: test
+    volumes:
+      - ./coverage:/home/app/coverage
+      - ./dist:/home/app/dist
+      - ./src:/home/app/src
+      - ./test:/home/app/test
+      - ./package.json:/home/app/package.json

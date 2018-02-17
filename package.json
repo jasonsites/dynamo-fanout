@@ -1,0 +1,77 @@
+{
+  "name": "lambda-fanout",
+  "version": "0.0.1",
+  "main": "src/index.js",
+  "description": "lambda fanout for dynamo/kinesis streams",
+  "scripts": {
+    "build": "rm -rf dist/* && webpack",
+    "coverage": "nyc npm t",
+    "lint": "eslint src test",
+    "postversion": "npm run build",
+    "release": "standard-version",
+    "sec": "nsp check --output summary",
+    "test": "mocha --recursive --exit test/tests/**/*.test.js"
+  },
+  "author": "Jason Sites <email@jasonsites.com> (https://github.com/jasonsites)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonsites/lambda-fanout.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jasonsites/lambda-fanout/issues"
+  },
+  "homepage": "https://github.com/jasonsites/lambda-fanout#readme",
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "temp-directory": "./coverage/.nyc_output"
+  },
+  "dependencies": {
+    "@cludden/ssm-config": "^1.0.1",
+    "ajv": "^6.1.1",
+    "app-container": "^1.0.0",
+    "aws-sdk": "^2.185.0",
+    "bluebird": "^3.5.1",
+    "bunyan": "^1.8.12",
+    "es6-error": "^4.1.1",
+    "lodash.attempt": "^4.2.0",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "source-map-support": "^0.5.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-istanbul": "^0.12.2",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.4",
+    "mocha": "^5.0.0",
+    "nsp": "^3.1.0",
+    "nyc": "^11.4.1",
+    "retry": "^0.10.1",
+    "sinon": "^4.2.0",
+    "sinon-chai": "^2.14.0",
+    "standard-version": "^4.3.0",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
+  }
+}
