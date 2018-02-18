@@ -2,7 +2,7 @@ version: '3'
 
 services:
 
-  lambda-fanout:
+  dynamo-fanout:
     build:
       context: .
       dockerfile: ./test/Dockerfile
@@ -11,8 +11,12 @@ services:
       AWS_ACCESS_KEY_ID: xxxxxx
       AWS_REGION: us-west-2
       AWS_SECRET_ACCESS_KEY: xxxxxxxxxx
-      DYNAMO_TABLE_RESOURCE: test
-      KINESIS_FANOUT_RESOURCE_NAME: test
+      CONFIG_PREFIX: /secrets
+      DYNAMO_TABLE_ONE: dynamo-table-one
+      DYNAMO_TABLE_TWO: dynamo-table-two
+      KINESIS_STREAM_ONE: kinesis-stream-one
+      KINESIS_STREAM_TWO: kinesis-stream-two
+      LOG_LEVEL: debug
       NODE_ENV: test
     volumes:
       - ./coverage:/home/app/coverage

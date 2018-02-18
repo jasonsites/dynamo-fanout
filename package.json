@@ -1,8 +1,8 @@
 {
-  "name": "lambda-fanout",
+  "name": "dynamo-fanout",
   "version": "0.0.1",
   "main": "src/index.js",
-  "description": "lambda fanout for dynamo/kinesis streams",
+  "description": "lambda function to fan out dynamo stream messages to kinesis streams",
   "scripts": {
     "build": "rm -rf dist/* && webpack",
     "coverage": "nyc npm t",
@@ -16,12 +16,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jasonsites/lambda-fanout.git"
+    "url": "git+https://github.com/jasonsites/dynamo-fanout.git"
   },
   "bugs": {
-    "url": "https://github.com/jasonsites/lambda-fanout/issues"
+    "url": "https://github.com/jasonsites/dynamo-fanout/issues"
   },
-  "homepage": "https://github.com/jasonsites/lambda-fanout#readme",
+  "homepage": "https://github.com/jasonsites/dynamo-fanout#readme",
   "nyc": {
     "reporter": [
       "lcov",
