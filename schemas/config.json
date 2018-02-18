@@ -1,0 +1,24 @@
+{
+  "$id": "config",
+  "type": "object",
+  "properties": {
+    "log": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "enum": [
+            "trace",
+            "debug",
+            "info",
+            "warn",
+            "error",
+            "fatal"
+          ],
+          "default": "info"
+        }
+      },
+      "default": {}
+    }
+  },
+  "required": []
+}

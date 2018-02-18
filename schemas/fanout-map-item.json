@@ -1,0 +1,23 @@
+{
+  "$id": "fanout-map-item",
+  "type": "object",
+  "properties": {
+    "input": {
+      "type": "string"
+    },
+    "output": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "required": []
+}
