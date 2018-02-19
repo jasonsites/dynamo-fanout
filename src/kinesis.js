@@ -21,7 +21,7 @@ export default function (config) {
 
   /**
    * Promisified putRecord call that resolves with the passed message
-   * @param  {String} params.id       - dynamo image id
+   * @param  {String} params.id       - dynamo record id
    * @param  {Object} params.message  - dynamo record with unmarshalled images
    * @param  {String} params.stream   - stream name
    * @return {Promise}

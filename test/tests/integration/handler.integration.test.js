@@ -8,7 +8,7 @@ import sinon from 'sinon'
 
 import { handler } from '../../../src'
 import container from '../../../src/container'
-import { ConfigurationError, MalformedEventError } from '../../../src/errors'
+import { MalformedEventError } from '../../../src/errors'
 import { generateDynamoRecord } from '../../fixtures/dynamo'
 import { bootstrap } from '../../utils'
 
@@ -33,7 +33,7 @@ describe('[INTEGRATION] handler', function () {
   })
 
   describe('failure scenarios', function () {
-    it('fails on invalid dynamo stream message', function () {
+    it('fails (error) on invalid dynamo stream message', function () {
       const e = { Records: 'should-fail' }
       return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
         .to.be.rejectedWith(MalformedEventError)
@@ -53,7 +53,7 @@ describe('[INTEGRATION] handler', function () {
         .to.eventually.deep.equal([{ noop: true }])
     })
 
-    it('fails on invalid record (StreamViewType)', function () {
+    it('fails (no op) on invalid record (StreamViewType)', function () {
       const recordId = faker.random.uuid()
       const newImage = { id: recordId }
       const record = generateDynamoRecord({
@@ -64,10 +64,10 @@ describe('[INTEGRATION] handler', function () {
       record.dynamodb.StreamViewType = 'should-fail'
       const e = { Records: [record] }
       return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
-        .to.be.rejectedWith(MalformedEventError)
+        .to.eventually.deep.equal([{ noop: true }])
     })
 
-    it('fails on missing table to stream map entry', function () {
+    it('fails (no op) on missing table-to-stream map entry', function () {
       const recordId = faker.random.uuid()
       const newImage = { id: recordId }
       const record = generateDynamoRecord({
@@ -77,7 +77,7 @@ describe('[INTEGRATION] handler', function () {
       })
       const e = { Records: [record] }
       return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
-        .to.be.rejectedWith(ConfigurationError)
+        .to.eventually.deep.equal([{ noop: true }])
     })
   })
 

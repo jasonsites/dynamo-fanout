@@ -1,12 +1,21 @@
 import AWS from 'aws-sdk'
 import faker from 'faker'
-import _, { partial, range } from 'lodash'
+import _, { partial } from 'lodash'
 
-const awsRegion = 'us-west-2'
+/**
+ * Mock aws account number
+ * @type {String}
+ */
+export const account = faker.random.number({
+  min: 1000000000,
+  max: 9999999999,
+}).toString()
 
-export function generateAccount() {
-  return range(10).map(() => faker.random.number({ min: 0, max: 9 })).join('')
-}
+/**
+ * Mock aws region
+ * @type {String}
+ */
+export const awsRegion = 'us-west-2'
 
 /**
  * Generates a mock dynamo record
@@ -26,7 +35,6 @@ export function generateDynamoRecord({
   oldImage,
   table,
 }) {
-  const account = generateAccount()
   const base = {
     eventID: faker.random.number({ min: 1, max: 999999 }).toString(),
     eventVersion: '1.0',

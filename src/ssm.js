@@ -1,6 +1,6 @@
 /**
  * @module ssm
- * @overview exposes underlying SSM client for test purposes
+ * @overview ssm client
  */
 import AWS from 'aws-sdk'
 
@@ -9,4 +9,8 @@ export const inject = {
   type: 'object',
 }
 
+/**
+ * Configured ssm client
+ * @class {AWS.SSM}
+ */
 export default new AWS.SSM()

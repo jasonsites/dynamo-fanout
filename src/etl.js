@@ -36,7 +36,7 @@ export default function ({ config, dynamo, kinesis }) {
   function lookupStreamForTable(table) {
     const stream = streamMap[table]
     if (!stream) {
-      throw new ConfigurationError(`missing fanout stream for table '${table}'`)
+      return new ConfigurationError(`missing fanout stream for table '${table}'`)
     }
     return stream
   }
@@ -66,9 +66,23 @@ export default function ({ config, dynamo, kinesis }) {
       log.warn({ record }, 'Record did not originate from DynamoDB')
       return { noop: true }
     }
+
+    // parse and unmarshall dynamo data
     const data = dynamo.parseDynamoRecord(record, log)
+    if (data instanceof MalformedEventError) {
+      log.error(data)
+      return { noop: true }
+    }
     const { id, message, requestId, tableName } = data
+
+    // lookup kinesis stream target
     const stream = lookupStreamForTable(tableName)
+    if (stream instanceof ConfigurationError) {
+      log.error(stream)
+      return { noop: true }
+    }
+
+    // write message to kinesis
     await kinesis.writeToKinesis({ id, message, stream })
     return { id, requestId, success: true }
   }

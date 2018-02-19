@@ -54,9 +54,8 @@ export default async function () {
         return { id, message, requestId, tableName }
       }
       default: {
-        const err = new MalformedEventError('unsupported StreamViewType')
-        err.StreamViewType = StreamViewType
-        throw err
+        const err = new MalformedEventError(`unsupported StreamViewType '${StreamViewType}'`)
+        return err
       }
     }
   }
