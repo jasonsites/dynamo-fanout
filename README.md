@@ -1,9 +1,11 @@
-# dyanmo-fanout
-lambda function to fan out dynamo stream messages to kinesis streams
+# dynamo-fanout
+Lambda function to fan out DynamoDB stream messages to Kinesis streams
+
+DynamoDB Streams should have no more than 2 attached processes per shard to avoid throttling. This lambda function acts as a DynamoDB Streams consumer that first unmarshalls the NewImage/OldImage data from the stream record, then writes the result to Kinesis.
 
 ## Installation
+Clone the repo and install dependencies
 ```shell
-# clone the repo and install dependencies
 $ git clone git@github.com:jasonsites/dynamo-fanout.git
 $ cd dynamo-fanout && npm i
 ```
@@ -30,8 +32,6 @@ $ docker-compose run dynamo-fanout
 1. Run release script `npm run release`
 1. Push release & release tag to github `git push --follow-tags`
 1. [Publish new release](https://help.github.com/articles/creating-releases/) in github, using the release notes from the [CHANGELOG](./CHANGELOG.md)
-
-## Configuration
 
 ## License
 Copyright (c) 2018 Jason Sites

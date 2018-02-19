@@ -7,7 +7,7 @@ import Bluebird from 'bluebird'
 import get from 'lodash.get'
 import has from 'lodash.has'
 
-import { MalformedEventError } from './errors'
+import { ConfigurationError, MalformedEventError } from './errors'
 
 export const inject = {
   name: 'etl',
@@ -15,18 +15,12 @@ export const inject = {
     config: 'config',
     dynamo: 'dynamo',
     kinesis: 'kinesis',
+    validate: 'validation',
   },
 }
 
 export default function ({ config, dynamo, kinesis }) {
   const { fanout: { map } } = config
-  // Object.entries(map).map(([key, val]) => {
-  //   const valid = validate.fanout(val)
-  //   if (valid instanceof ValidationError) {
-  //     log.debug({ record }, `ValidationError: ${valid.message}`)
-  //     return { noop: true }
-  //   }
-  // })
 
   /**
    * Map of dynamo tables to kinesis streams
@@ -35,14 +29,14 @@ export default function ({ config, dynamo, kinesis }) {
   const streamMap = { ...map }
 
   /**
-   * Helper function for returning the kinesis stream arn for a given table
+   * Helper function for returning kinesis stream arn for a given table
    * @param  {String} table - table name
    * @return {String}
    */
   function lookupStreamForTable(table) {
     const stream = streamMap[table]
     if (!stream) {
-      throw new Error(`Missing fanout stream for table '${table}'`)
+      throw new ConfigurationError(`missing fanout stream for table '${table}'`)
     }
     return stream
   }
@@ -72,7 +66,7 @@ export default function ({ config, dynamo, kinesis }) {
       log.warn({ record }, 'Record did not originate from DynamoDB')
       return { noop: true }
     }
-    const data = dynamo.parseDynamoRecord(record)
+    const data = dynamo.parseDynamoRecord(record, log)
     const { id, message, requestId, tableName } = data
     const stream = lookupStreamForTable(tableName)
     await kinesis.writeToKinesis({ id, message, stream })

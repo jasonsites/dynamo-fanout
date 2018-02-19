@@ -5,7 +5,6 @@
 import Ajv from 'ajv'
 
 import config from '../schemas/config.json'
-import fanout from '../schemas/fanout-map-item.json'
 import { ValidationError } from './errors'
 
 export const inject = {
@@ -23,7 +22,6 @@ export default function () {
   // expose bound validation methods
   return {
     config: validate.bind(null, ajv, ajv.compile(config)),
-    fanout: validate.bind(null, ajv, ajv.compile(fanout)),
   }
 }
 

@@ -2,7 +2,7 @@
   "name": "dynamo-fanout",
   "version": "0.0.1",
   "main": "src/index.js",
-  "description": "lambda function to fan out dynamo stream messages to kinesis streams",
+  "description": "Lambda function to fan out DynamoDB stream messages to Kinesis streams",
   "scripts": {
     "build": "rm -rf dist/* && webpack",
     "coverage": "nyc npm t",

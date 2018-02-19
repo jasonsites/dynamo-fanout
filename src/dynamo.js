@@ -4,6 +4,8 @@
  */
 import AWS from 'aws-sdk'
 
+import { MalformedEventError } from './errors'
+
 export const inject = {
   name: 'dynamo',
 }
@@ -17,9 +19,9 @@ export default async function () {
   const { unmarshall } = converter
 
   /**
- * Extract dynamo table name from a dynamo ARN
+ * Extract dynamo table name from a dynamo arn
  * (arn:aws:dynamodb:region:account-id:table/tablename)
- * @param  {String} arn - DynamoDB arn
+ * @param  {String} arn - dynamo arn
  * @return {String}
  */
   function extractTableNameFromStreamARN(arn) {
@@ -51,8 +53,8 @@ export default async function () {
         const { id, requestId } = message.dynamodb.NewImage
         return { id, message, requestId, tableName }
       }
-      default: { // TODO: refactor
-        const err = new Error('Unsupported StreamViewType')
+      default: {
+        const err = new MalformedEventError('unsupported StreamViewType')
         err.StreamViewType = StreamViewType
         throw err
       }
