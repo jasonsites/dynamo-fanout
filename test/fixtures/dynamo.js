@@ -10,16 +10,20 @@ export function generateAccount() {
 
 /**
  * Generates a mock dynamo record
- * @param  {String}  params.eventName - event name
+ * @param  {String}  params.eventName - event name (INSERT, MODIFY, REMOVE)
+ * @param  {String}  params.id        - record id
  * @param  {Boolean} params.marshal   - determines if data should be marshalled
- * @param  {Object}  params.record    - record data
+ * @param  {Object}  params.newImage  - dynamodb.NewImage record data
+ * @param  {Object}  params.oldImage  - dynamodb.OldImage record data
  * @param  {String}  params.table     - dynamo table name
  * @return {Object}
  */
 export function generateDynamoRecord({
   eventName = 'INSERT',
+  id,
   marshal = true,
-  record,
+  newImage,
+  oldImage,
   table,
 }) {
   const account = generateAccount()
@@ -32,20 +36,27 @@ export function generateDynamoRecord({
     eventSource: 'aws:dynamodb',
   }
   const dynamodb = {
-    Keys: { id: { S: record.id } },
+    Keys: { id: { S: id } },
     StreamViewType: 'NEW_AND_OLD_IMAGES',
     SequenceNumber: faker.random.number({ min: 1, max: 999999 }).toString(),
     SizeBytes: faker.random.number({ min: 1, max: 999999 }),
   }
   const { marshall } = AWS.DynamoDB.Converter
   const marshalItem = partial(marshall, _, { convertEmptyValues: true })
-  if (eventName === 'REMOVE') {
+  if (eventName === 'INSERT' || eventName === 'MODIFY') {
+    if (!newImage) {
+      throw new Error('`newImage` is required for INSERT or MODIFY events')
+    }
     Object.assign(dynamodb, {
-      OldImage: marshal ? marshalItem(record) : record,
+      NewImage: marshal ? marshalItem(newImage) : newImage,
     })
-  } else {
+  }
+  if (eventName === 'REMOVE' || eventName === 'MODIFY') {
+    if (!oldImage) {
+      throw new Error('`oldImage`is required for REMOVE or MODIFY events')
+    }
     Object.assign(dynamodb, {
-      NewImage: marshal ? marshalItem(record) : record,
+      OldImage: marshal ? marshalItem(oldImage) : oldImage,
     })
   }
   return Object.assign(base, { dynamodb })
