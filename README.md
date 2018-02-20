@@ -3,6 +3,10 @@ Lambda function to fan out DynamoDB stream messages to Kinesis streams
 
 DynamoDB Streams should have no more than 2 attached processes per shard to avoid throttling. This lambda function acts as a DynamoDB Streams consumer that first unmarshalls the NewImage/OldImage data from the stream record, then writes the result to Kinesis.
 
+<p align="center">
+  <img src="./architecture.png" align="center" alt="architecture diagram" />
+<p>
+
 ## Installation
 Clone the repo and install dependencies
 ```shell

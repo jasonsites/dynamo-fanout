@@ -1,0 +1,23 @@
+digraph architecture {
+  rankdir="LR"
+
+  dynamo1 [label="Dynamo" shape="cylinder" fillcolor="#99815f", fontcolor="#ffffff", style="filled"]
+  dynamo2 [label="Dynamo" shape="cylinder" fillcolor="#99815f", fontcolor="#ffffff", style="filled"]
+  dynamo3 [label="Dynamo" shape="cylinder" fillcolor="#99815f", fontcolor="#ffffff", style="filled"]
+
+  fanout [label="Fanout (λ)" shape="ellipse" fillcolor="#ffa300", style="filled"]
+
+  kinesis1 [label="Kinesis   " shape="cds" fillcolor="#2a9bea", fontcolor="#ffffff", style="filled"]
+  kinesis2 [label="Kinesis   " shape="cds" fillcolor="#2a9bea", fontcolor="#ffffff", style="filled"]
+  kinesis3 [label="Kinesis   " shape="cds" fillcolor="#2a9bea", fontcolor="#ffffff", style="filled"]
+
+  dynamo1 -> fanout [tailport="e"]
+  dynamo2 -> fanout [tailport="e"]
+  dynamo3 -> fanout [tailport="e"]
+  fanout -> kinesis1 [headport="w"]
+  fanout -> kinesis2 [headport="w"]
+  fanout -> kinesis3 [headport="w"]
+
+  {rank=same dynamo1 dynamo2 dynamo3}
+  {rank=same kinesis1 kinesis2 kinesis3}
+}
