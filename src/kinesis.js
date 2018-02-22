@@ -2,8 +2,8 @@
  * @module kinesis
  * @overview low level aws kinesis sdk
  */
-
 import AWS from 'aws-sdk'
+import retry from 'retry'
 
 export const inject = {
   name: 'kinesis',
@@ -11,32 +11,103 @@ export const inject = {
 }
 
 export default function (config) {
-  const { aws: { region } } = config
+  const { aws: { region }, backoff, kinesis } = config
+
+  // kinesis client options
+  const { 'stream-name': StreamName } = kinesis.target
+  const options = { params: { StreamName }, region }
 
   /**
    * Configured kinesis client
    * @class {AWS.Kinesis}
    */
-  const client = new AWS.Kinesis({ region })
+  const client = new AWS.Kinesis(options)
 
   /**
-   * Promisified putRecord call that resolves with the passed message
-   * @param  {String} params.id       - dynamo record id
-   * @param  {Object} params.message  - dynamo record with unmarshalled images
-   * @param  {String} params.stream   - stream name
+   * Wrapper around client method that handles retrying failed records
+   * @param  {Object[]} records - extracted records
+   * @param  {Object}   log     - logger
    * @return {Promise}
    */
-  async function writeToKinesis({ id, message, stream }) {
-    await client.putRecord({
-      Data: Buffer.from(JSON.stringify(message), 'utf8'),
-      PartitionKey: id,
-      StreamName: stream,
-    }).promise()
-    return message
+  async function putRecords(records, log) {
+    const operation = new PutRecordsOperation({
+      config: backoff,
+      kinesis: client,
+      log,
+    })
+    await operation.exec(records)
   }
 
   return {
     client,
-    writeToKinesis,
+    putRecords,
+  }
+}
+
+/**
+ * Handles retrying failed records with exponential backoff
+ * @class {PutRecordsOperation}
+ */
+export class PutRecordsOperation {
+  /**
+   * @param {Object} params.client  - configured kinesis client
+   * @param {Object} params.config  - backoff config
+   * @param {Object} params.log     - logger
+   */
+  constructor({ client, config, log }) {
+    this.operation = retry.operation(config)
+    this.client = client
+    this.log = log
+  }
+
+  /**
+   * Executes the underlying operation
+   * @param  {Object[]} records - extracted records
+   * @return {Promise}
+   */
+  async exec(records) {
+    /* eslint no-await-in-loop: 0 */
+    // keep a reference to the records and define intial params
+    const params = records.reduce((memo, record) => {
+      memo.Records.push({
+        Data: `${JSON.stringify(record)}\n`,
+        PartitionKey: record.id,
+      })
+      return memo
+    }, { Records: [] })
+
+    // while there are records left to send, send them.
+    // remove successful records from params after each call
+    while (params.Records.length > 0) {
+      const { FailedRecordCount, Records } = await this._putRecords(Object.assign({}, params))
+      if (FailedRecordCount !== 0) {
+        params.Records = params.Records.filter((r, i) => typeof Records[i].ErrorCode === 'string')
+      } else {
+        params.Records = []
+      }
+    }
+  }
+
+  /**
+   * Wrapped client method that overlays backoff logic
+   * @param  {Object} params - put record parameters
+   * @return {Promise}
+   * @private
+   */
+  _putRecords(params) {
+    return new Promise((resolve, reject) => {
+      this.operation.attempt(async () => {
+        try {
+          const data = await this.client.putRecords(params).promise()
+          resolve(data)
+        } catch (err) {
+          if (this.operation.retry(err)) {
+            this.log.warn(err, 'retrying failed operation')
+          } else {
+            reject(err)
+          }
+        }
+      })
+    })
   }
 }

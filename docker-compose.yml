@@ -12,15 +12,11 @@ services:
       AWS_REGION: us-west-2
       AWS_SECRET_ACCESS_KEY: xxxxxxxxxx
       CONFIG_PREFIX: /secrets
-      DYNAMO_TABLE_ONE: dynamo-table-one
-      DYNAMO_TABLE_TWO: dynamo-table-two
-      KINESIS_STREAM_ONE: kinesis-stream-one
-      KINESIS_STREAM_TWO: kinesis-stream-two
+      KINESIS_TARGET: test-stream
       LOG_LEVEL: debug
       NODE_ENV: test
     volumes:
       - ./coverage:/home/app/coverage
-      - ./dist:/home/app/dist
       - ./src:/home/app/src
       - ./test:/home/app/test
       - ./package.json:/home/app/package.json

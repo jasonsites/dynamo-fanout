@@ -12,7 +12,10 @@
     "sec": "nsp check --output summary",
     "test": "mocha --recursive --exit test/tests/**/*.test.js"
   },
-  "author": "Jason Sites <email@jasonsites.com> (https://github.com/jasonsites)",
+  "contributors": [
+    "Chris Ludden <chris.ludden@gmail.com> (https://github.com/cludden)",
+    "Jason Sites <email@jasonsites.com> (https://github.com/jasonsites)"
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -43,6 +46,7 @@
     "lodash.attempt": "^4.2.0",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
+    "retry": "^0.10.1",
     "source-map-support": "^0.5.3"
   },
   "devDependencies": {
@@ -67,7 +71,6 @@
     "mocha": "^5.0.0",
     "nsp": "^3.1.0",
     "nyc": "^11.4.1",
-    "retry": "^0.10.1",
     "sinon": "^4.2.0",
     "sinon-chai": "^2.14.0",
     "standard-version": "^4.3.0",
