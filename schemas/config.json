@@ -2,10 +2,71 @@
   "$id": "config",
   "type": "object",
   "properties": {
-    "log": {
+    "backoff": {
+      "type": "object",
+      "default": {},
+      "properties": {
+        "retries": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "factor": {
+          "type": "number",
+          "default": 2
+        },
+        "minTimeout": {
+          "type": "integer",
+          "default": 500,
+          "minimum": 0
+        },
+        "maxTimeout": {
+          "type": "integer",
+          "default": 1000,
+          "minimum": {
+            "$data": "1/minTimeout"
+          }
+        },
+        "randomize": {
+          "default": false,
+          "anyOf": [
+            {
+              "const": false
+            },
+            {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 2
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "kinesis": {
       "type": "object",
       "properties": {
+        "target": {
+          "type": "object",
+          "properties": {
+            "stream-name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "stream-name"
+          ]
+        }
+      },
+      "required": [
+        "target"
+      ]
+    },
+    "log": {
+      "type": "object",
+      "default": {},
+      "properties": {
         "level": {
+          "default": "info",
           "enum": [
             "trace",
             "debug",
@@ -13,11 +74,9 @@
             "warn",
             "error",
             "fatal"
-          ],
-          "default": "info"
+          ]
         }
-      },
-      "default": {}
+      }
     }
   },
   "required": []

@@ -21,7 +21,7 @@ export async function handler(e, ctx, done) {
   const modules = await container.load(MODULES)
   const log = modules.log.child({ req_id: ctx.awsRequestId })
   try {
-    const result = await modules.etl.processMessage(e, log)
+    const result = await modules.etl.processEvent(e, log)
     log.info({ result })
     done(null, result)
   } catch (err) {
