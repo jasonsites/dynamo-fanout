@@ -2,22 +2,18 @@ import Bluebird from 'bluebird'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import faker from 'faker'
-// import { cloneDeep, extend, omit } from 'lodash'
 import { describe, it } from 'mocha'
 import sinon from 'sinon'
 
-import { handler } from '../../../src'
-import container from '../../../src/container'
-import { MalformedEventError } from '../../../src/errors'
-import { generateDynamoRecord } from '../../fixtures/dynamo'
-import { bootstrap } from '../../utils'
+import { handler } from '../../src'
+import container from '../../src/container'
+import { MalformedEventError } from '../../src/errors'
+import { generateDynamoRecord } from '../fixtures/dynamo'
+import { bootstrap } from '../utils'
 
 chai.use(chaiAsPromised)
 
-const {
-  DYNAMO_TABLE_ONE,
-  KINESIS_STREAM_ONE,
-} = process.env
+const DYNAMO_TABLE = 'test-table-name'
 
 describe('[INTEGRATION] handler', function () {
   const sandbox = sinon.sandbox.create()
@@ -45,12 +41,12 @@ describe('[INTEGRATION] handler', function () {
       const record = generateDynamoRecord({
         id: recordId,
         newImage,
-        table: DYNAMO_TABLE_ONE,
+        table: DYNAMO_TABLE,
       })
-      record.eventSource = 'aws:kinesis'
+      record.eventSource = 'should-fail'
       const e = { Records: [record] }
       return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
-        .to.eventually.deep.equal([{ noop: true }])
+        .to.eventually.deep.equal({ n: 0 })
     })
 
     it('fails (no op) on invalid record (StreamViewType)', function () {
@@ -59,32 +55,19 @@ describe('[INTEGRATION] handler', function () {
       const record = generateDynamoRecord({
         id: recordId,
         newImage,
-        table: DYNAMO_TABLE_ONE,
+        table: DYNAMO_TABLE,
       })
       record.dynamodb.StreamViewType = 'should-fail'
       const e = { Records: [record] }
       return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
-        .to.eventually.deep.equal([{ noop: true }])
-    })
-
-    it('fails (no op) on missing table-to-stream map entry', function () {
-      const recordId = faker.random.uuid()
-      const newImage = { id: recordId }
-      const record = generateDynamoRecord({
-        id: recordId,
-        newImage,
-        table: 'should-fail',
-      })
-      const e = { Records: [record] }
-      return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
-        .to.eventually.deep.equal([{ noop: true }])
+        .to.eventually.deep.equal({ n: 0 })
     })
   })
 
   describe('success scenarios', function () {
     it('writes unmarshalled dynamo data to kinesis (INSERT)', function () {
-      const stub = sandbox.stub(this.kinesis.client, 'putRecord').returns({
-        promise: sandbox.stub().resolves(null),
+      const stub = sandbox.stub(this.kinesis.client, 'putRecords').returns({
+        promise: sandbox.stub().resolves({ FailedRecordCount: 0 }),
       })
       const recordId = faker.random.uuid()
       const newImage = {
@@ -96,14 +79,13 @@ describe('[INTEGRATION] handler', function () {
       const record = generateDynamoRecord({
         id: recordId,
         newImage,
-        table: DYNAMO_TABLE_ONE,
+        table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
       return Bluebird.fromCallback(done => handler(e, {}, done))
         .then(() => {
-          const { Data, PartitionKey, StreamName } = stub.lastCall.args[0]
+          const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
-          expect(StreamName).to.equal(KINESIS_STREAM_ONE)
           const data = JSON.parse(Data.toString())
           expect(data).to.be.an('object')
             .with.all.keys(['awsRegion', 'dynamodb', 'eventID', 'eventName', 'eventSource', 'eventSourceARN', 'eventVersion'])
@@ -140,8 +122,8 @@ describe('[INTEGRATION] handler', function () {
     })
 
     it('writes unmarshalled dynamo data to kinesis (MODIFY)', function () {
-      const stub = sandbox.stub(this.kinesis.client, 'putRecord').returns({
-        promise: sandbox.stub().resolves(null),
+      const stub = sandbox.stub(this.kinesis.client, 'putRecords').returns({
+        promise: sandbox.stub().resolves({ FailedRecordCount: 0 }),
       })
       const recordId = faker.random.uuid()
       const oldImage = {
@@ -161,14 +143,13 @@ describe('[INTEGRATION] handler', function () {
         id: recordId,
         newImage,
         oldImage,
-        table: DYNAMO_TABLE_ONE,
+        table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
       return Bluebird.fromCallback(done => handler(e, {}, done))
         .then(() => {
-          const { Data, PartitionKey, StreamName } = stub.lastCall.args[0]
+          const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
-          expect(StreamName).to.equal(KINESIS_STREAM_ONE)
           const data = JSON.parse(Data.toString())
           expect(data).to.be.an('object')
             .with.all.keys(['awsRegion', 'dynamodb', 'eventID', 'eventName', 'eventSource', 'eventSourceARN', 'eventVersion'])
@@ -212,8 +193,8 @@ describe('[INTEGRATION] handler', function () {
     })
 
     it('writes unmarshalled dynamo data to kinesis (REMOVE)', function () {
-      const stub = sandbox.stub(this.kinesis.client, 'putRecord').returns({
-        promise: sandbox.stub().resolves(null),
+      const stub = sandbox.stub(this.kinesis.client, 'putRecords').returns({
+        promise: sandbox.stub().resolves({ FailedRecordCount: 0 }),
       })
       const recordId = faker.random.uuid()
       const oldImage = {
@@ -226,14 +207,13 @@ describe('[INTEGRATION] handler', function () {
         eventName: 'REMOVE',
         id: recordId,
         oldImage,
-        table: DYNAMO_TABLE_ONE,
+        table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
       return Bluebird.fromCallback(done => handler(e, {}, done))
         .then(() => {
-          const { Data, PartitionKey, StreamName } = stub.lastCall.args[0]
+          const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
-          expect(StreamName).to.equal(KINESIS_STREAM_ONE)
           const data = JSON.parse(Data.toString())
           expect(data).to.be.an('object')
             .with.all.keys(['awsRegion', 'dynamodb', 'eventID', 'eventName', 'eventSource', 'eventSourceARN', 'eventVersion'])

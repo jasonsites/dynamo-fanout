@@ -29,13 +29,9 @@ export default function (config) {
    * @param  {Object}   log     - logger
    * @return {Promise}
    */
-  async function putRecords(records, log) {
-    const operation = new PutRecordsOperation({
-      config: backoff,
-      kinesis: client,
-      log,
-    })
-    await operation.exec(records)
+  async function putRecords(data, log) {
+    const operation = new PutRecordsOperation({ client, config: backoff, log })
+    await operation.exec(data)
   }
 
   return {
@@ -62,16 +58,17 @@ export class PutRecordsOperation {
 
   /**
    * Executes the underlying operation
-   * @param  {Object[]} records - extracted records
+   * @param  {Object[]} data - extracted key/record objects
    * @return {Promise}
    */
-  async exec(records) {
+  async exec(data) {
     /* eslint no-await-in-loop: 0 */
     // keep a reference to the records and define intial params
-    const params = records.reduce((memo, record) => {
+    const params = data.reduce((memo, { key, record }) => {
+      console.log('RECORD::::', JSON.stringify(record))
       memo.Records.push({
         Data: `${JSON.stringify(record)}\n`,
-        PartitionKey: record.id,
+        PartitionKey: key,
       })
       return memo
     }, { Records: [] })

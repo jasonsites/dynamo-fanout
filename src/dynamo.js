@@ -4,8 +4,6 @@
  */
 import AWS from 'aws-sdk'
 
-import { MalformedEventError } from './errors'
-
 export const inject = {
   name: 'dynamo',
 }
@@ -25,8 +23,8 @@ export default async function () {
    */
   function parseDynamoRecord(record) {
     const message = record
-    const { dynamodb } = message
-    const { NewImage, OldImage, StreamViewType } = dynamodb
+    const { Keys, NewImage, OldImage, StreamViewType } = message.dynamodb
+    const key = Keys.id.S
     switch (StreamViewType) {
       case 'NEW_AND_OLD_IMAGES': {
         if (NewImage) {
@@ -35,11 +33,10 @@ export default async function () {
         if (OldImage) {
           message.dynamodb.OldImage = unmarshall(OldImage)
         }
-        return message
+        return { key, record: message }
       }
       default: {
-        // TODO
-        return new MalformedEventError(`unsupported StreamViewType '${StreamViewType}'`)
+        return new Error(`unsupported StreamViewType '${StreamViewType}'`)
       }
     }
   }

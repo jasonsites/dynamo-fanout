@@ -15,7 +15,7 @@ export default {
     },
     {
       Name: `${prefix}/kinesis/target`,
-      Value: KINESIS_TARGET,
+      Value: JSON.stringify({ 'stream-name': KINESIS_TARGET }),
     },
     {
       Name: `${prefix}/log/level`,

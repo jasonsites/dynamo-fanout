@@ -13,7 +13,7 @@ services:
       AWS_SECRET_ACCESS_KEY: xxxxxxxxxx
       CONFIG_PREFIX: /secrets
       KINESIS_TARGET: test-stream
-      LOG_LEVEL: debug
+      LOG_LEVEL: info
       NODE_ENV: test
     volumes:
       - ./coverage:/home/app/coverage

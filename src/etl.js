@@ -26,16 +26,16 @@ export default function ({ dynamo, kinesis }) {
    */
   async function processEvent(e, log) {
     // extract data
-    const records = extractRecords(e, log)
-    log.debug({ records }, 'records')
-    if (!records.length) {
+    const data = extractRecords(e, log)
+    log.debug({ data }, 'record data')
+    if (!data.length) {
       return { n: 0 }
     }
 
     // batch write to kinesis
-    const result = await kinesis.putRecords(records, log)
-    log.debug({ result }, 'result')
-    return { n: records.length }
+    const result = await kinesis.putRecords(data, log)
+    log.debug({ result }, 'kinesis result')
+    return { n: data.length }
   }
 
   /**
@@ -59,7 +59,7 @@ export default function ({ dynamo, kinesis }) {
 
       // parse and unmarshall dynamo data
       const data = dynamo.parseDynamoRecord(record, log)
-      if (data instanceof MalformedEventError) {
+      if (data instanceof Error) {
         log.error(data)
         return memo
       }
