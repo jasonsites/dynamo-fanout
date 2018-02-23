@@ -1,6 +1,6 @@
 {
   "name": "dynamo-fanout",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "main": "src/index.js",
   "description": "Lambda function to fan out DynamoDB stream messages to Kinesis streams",
   "scripts": {
