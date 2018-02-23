@@ -21,7 +21,7 @@ export default function ({ dynamo, kinesis }) {
   /**
    * Process a dynamo stream message
    * @param {Object} e    - lambda event
-   * @param {Object} log  - log module
+   * @param {Object} log  - logger
    * @return {Promise[]}
    */
   async function processEvent(e, log) {
@@ -40,9 +40,9 @@ export default function ({ dynamo, kinesis }) {
 
   /**
    * Process a single dynamo stream record, unmarshall, and write to kinesis
-   * @param {Object} record  - event data
-   * @param {Object} log     - log module
-   * @return {Promise}
+   * @param {Object} e    - lambda event
+   * @param {Object} log  - logger
+   * @return {Object[]}
    */
   function extractRecords(e, log) {
     const records = get(e, 'Records')

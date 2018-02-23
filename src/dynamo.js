@@ -18,22 +18,26 @@ export default async function () {
 
   /**
    * Extract document from dynamo record and return related data
-   * @param  {Object} params.record - dynamo stream record
+   * @param  {Object} record - dynamo stream record
    * @return {Object}
    */
   function parseDynamoRecord(record) {
-    const message = record
-    const { Keys, NewImage, OldImage, StreamViewType } = message.dynamodb
-    const key = Keys.id.S
+    const modified = record
+    const { Keys, NewImage, OldImage, StreamViewType } = modified.dynamodb
+    const key = Object.entries(unmarshall(Keys))
+      .reduce((memo, [, val], idx) => {
+        if (idx === 0) return `${val}`
+        return `${memo}-${val}`
+      }, '')
     switch (StreamViewType) {
       case 'NEW_AND_OLD_IMAGES': {
         if (NewImage) {
-          message.dynamodb.NewImage = unmarshall(NewImage)
+          modified.dynamodb.NewImage = unmarshall(NewImage)
         }
         if (OldImage) {
-          message.dynamodb.OldImage = unmarshall(OldImage)
+          modified.dynamodb.OldImage = unmarshall(OldImage)
         }
-        return { key, record: message }
+        return { key, record: modified }
       }
       default: {
         return new Error(`unsupported StreamViewType '${StreamViewType}'`)

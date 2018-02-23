@@ -13,9 +13,9 @@ export const MODULES = {
 
 /**
  * Lambda event handler that processes dynamo stream records
- * @param  {Object} e       - lambda event
- * @param  {Object} ctx     - lambda context
- * @param  {Function} done  - lambda callback
+ * @param {Object} e      - lambda event
+ * @param {Object} ctx    - lambda context
+ * @param {Function} done - lambda callback
  */
 export async function handler(e, ctx, done) {
   const modules = await container.load(MODULES)

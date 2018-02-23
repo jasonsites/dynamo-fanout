@@ -25,10 +25,10 @@ variable "debug" {
   default     = ""
 }
 
-variable "dynamo_stream_arns" {
-  type        = "list"
-  description = "TODO"
-  default     = []
+variable "dynamo_stream_arn" {
+  type        = "string"
+  description = "source dynamo stream arn"
+  default     = ""
 }
 
 variable "enabled" {
@@ -37,10 +37,10 @@ variable "enabled" {
   default     = "true"
 }
 
-variable "kinesis_stream_arns" {
-  type        = "list"
-  description = "TODO"
-  default     = []
+variable "kinesis_stream_arn" {
+  type        = "string"
+  description = "target kinesis stream arn"
+  default     = ""
 }
 
 variable "memory_size" {

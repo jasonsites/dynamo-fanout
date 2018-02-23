@@ -25,8 +25,8 @@ export default function (config) {
 
   /**
    * Wrapper around client method that handles retrying failed records
-   * @param  {Object[]} records - extracted records
-   * @param  {Object}   log     - logger
+   * @param  {Object[]} data - extracted records
+   * @param  {Object}   log  - logger
    * @return {Promise}
    */
   async function putRecords(data, log) {
@@ -58,14 +58,13 @@ export class PutRecordsOperation {
 
   /**
    * Executes the underlying operation
-   * @param  {Object[]} data - extracted key/record objects
+   * @param  {Object[]} data - extracted records
    * @return {Promise}
    */
   async exec(data) {
     /* eslint no-await-in-loop: 0 */
     // keep a reference to the records and define intial params
     const params = data.reduce((memo, { key, record }) => {
-      console.log('RECORD::::', JSON.stringify(record))
       memo.Records.push({
         Data: `${JSON.stringify(record)}\n`,
         PartitionKey: key,

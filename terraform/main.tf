@@ -46,9 +46,8 @@ resource "aws_security_group" "dynamo_fanout" {
 }
 
 # subscribe lambda function to source dynamo streams
-resource "aws_lambda_event_source_mapping" "dynamo_streams" {
-  count             = "${len(var.dynamo_stream_arns)}"
-  event_source_arn  = "${var.dynamo_stream_arns[count.index]}"
+resource "aws_lambda_event_source_mapping" "dynamo_stream" {
+  event_source_arn  = "${var.dynamo_stream_arn}"
   enabled           = "${var.enabled}"
   function_name     = "${aws_lambda_function.dynamo_fanout.arn}"
   starting_position = "${var.starting_position}"
@@ -124,7 +123,7 @@ data "aws_iam_policy_document" "dynamo_fanout" {
     effect = "Allow"
 
     resources = [
-      "${var.kinesis_stream_arns}",
+      "${var.kinesis_stream_arn}",
     ]
   }
 

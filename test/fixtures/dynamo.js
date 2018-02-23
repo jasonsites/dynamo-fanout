@@ -21,7 +21,7 @@ export const awsRegion = 'us-west-2'
  * Generates a mock dynamo record
  * @param  {String}  params.eventName - event name (INSERT, MODIFY, REMOVE)
  * @param  {String}  params.id        - record id
- * @param  {Boolean} params.marshal   - determines if data should be marshalled
+ * @param  {Boolean} params.marshal   - marshalled/unmarshalled
  * @param  {Object}  params.newImage  - dynamodb.NewImage record data
  * @param  {Object}  params.oldImage  - dynamodb.OldImage record data
  * @param  {String}  params.table     - dynamo table name
