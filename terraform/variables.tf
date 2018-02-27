@@ -6,12 +6,12 @@ variable account_id {
 variable "batch_size" {
   type        = "string"
   description = "lambda function batch size"
-  default     = "100"
+  default     = 100
 }
 
 variable "caller_arn" {
   type        = "string"
-  description = "TODO"
+  description = "current caller arn"
 }
 
 variable "config_prefix" {
@@ -28,25 +28,28 @@ variable "debug" {
 variable "dynamo_stream_arn" {
   type        = "string"
   description = "source dynamo stream arn"
-  default     = ""
 }
 
 variable "enabled" {
   type        = "string"
   description = "enable event source mapping for lambda function"
-  default     = "true"
+  default     = true
 }
 
 variable "kinesis_stream_arn" {
   type        = "string"
   description = "target kinesis stream arn"
-  default     = ""
+}
+
+variable "kinesis_stream_name" {
+  type        = "string"
+  description = "target kinesis stream name"
 }
 
 variable "memory_size" {
   type        = "string"
   description = "lambda function memory limit"
-  default     = "256"
+  default     = 256
 }
 
 variable "name" {
@@ -71,7 +74,7 @@ variable "s3_key" {
 
 variable "starting_position" {
   type        = "string"
-  description = "TODO"
+  description = "lambda subscription starting point"
 }
 
 variable "subnet_ids" {
