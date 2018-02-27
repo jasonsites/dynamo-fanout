@@ -24,6 +24,19 @@ resource "aws_lambda_function" "dynamo_fanout" {
   }
 }
 
+# subscribe lambda function to source dynamo streams
+resource "aws_lambda_event_source_mapping" "dynamo_stream" {
+  event_source_arn  = "${var.dynamo_stream_arn}"
+  enabled           = "${var.enabled}"
+  function_name     = "${aws_lambda_function.dynamo_fanout.arn}"
+  starting_position = "${var.starting_position}"
+  batch_size        = "${var.batch_size}"
+}
+
+###############################################################################
+## security group
+###############################################################################
+
 # define security group
 resource "aws_security_group" "dynamo_fanout" {
   name        = "${var.name}"
@@ -45,14 +58,9 @@ resource "aws_security_group" "dynamo_fanout" {
   }
 }
 
-# subscribe lambda function to source dynamo streams
-resource "aws_lambda_event_source_mapping" "dynamo_stream" {
-  event_source_arn  = "${var.dynamo_stream_arn}"
-  enabled           = "${var.enabled}"
-  function_name     = "${aws_lambda_function.dynamo_fanout.arn}"
-  starting_position = "${var.starting_position}"
-  batch_size        = "${var.batch_size}"
-}
+###############################################################################
+## iam resources
+###############################################################################
 
 # define iam role for lambda function
 resource "aws_iam_role" "dynamo_fanout" {
@@ -169,9 +177,24 @@ resource "aws_iam_role_policy_attachment" "execution_role" {
   depends_on = ["aws_iam_role.dynamo_fanout"]
 }
 
+###############################################################################
+## cloudwatch logs
+###############################################################################
+
 # include cloudwatch log group resource definition in order to ensure it is
 # removed with function removal
 resource "aws_cloudwatch_log_group" "dynamo_fanout" {
   name              = "/aws/lambda/${aws_lambda_function.dynamo_fanout.function_name}"
   retention_in_days = "365"
+}
+
+###############################################################################
+## ssm permissions
+###############################################################################
+
+resource "aws_ssm_parameter" "kinesis_target_stream_name" {
+  name      = "${var.config_prefix}/kinesis/target/stream-name"
+  type      = "String"
+  value     = "${var.kinesis_stream_name}"
+  overwrite = true
 }
