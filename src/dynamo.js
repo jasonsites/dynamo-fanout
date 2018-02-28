@@ -24,10 +24,11 @@ export default async function () {
   function parseDynamoRecord(record) {
     const modified = record
     const { Keys, NewImage, OldImage, StreamViewType } = modified.dynamodb
-    const key = Object.entries(unmarshall(Keys))
-      .reduce((memo, [, val], idx) => {
-        if (idx === 0) return `${val}`
-        return `${memo}-${val}`
+    const unmarshalledKeys = unmarshall(Keys)
+    const key = Object.keys(unmarshalledKeys)
+      .reduce((memo, k, idx) => {
+        if (idx === 0) return `${unmarshalledKeys[k]}`
+        return `${memo}-${unmarshalledKeys[k]}`
       }, '')
     switch (StreamViewType) {
       case 'NEW_AND_OLD_IMAGES': {
