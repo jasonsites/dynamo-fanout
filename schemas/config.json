@@ -2,6 +2,15 @@
   "$id": "config",
   "type": "object",
   "properties": {
+    "aws": {
+      "type": "object",
+      "default": {},
+      "properties": {
+        "region": {
+          "type": "string"
+        }
+      }
+    },
     "backoff": {
       "type": "object",
       "default": {},
@@ -79,5 +88,8 @@
       }
     }
   },
-  "required": []
+  "required": [
+    "aws",
+    "kinesis"
+  ]
 }
