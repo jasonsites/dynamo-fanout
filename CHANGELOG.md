@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.5"></a>
+## [0.2.5](https://github.com/jasonsites/dynamo-fanout/compare/v0.2.4...v0.2.5) (2018-02-28)
+
+
+### Bug Fixes
+
+* adds babel polyfills ([a090f3c](https://github.com/jasonsites/dynamo-fanout/commit/a090f3c))
+
+
+
 <a name="0.2.4"></a>
 ## [0.2.4](https://github.com/jasonsites/dynamo-fanout/compare/v0.2.3...v0.2.4) (2018-02-28)
 
