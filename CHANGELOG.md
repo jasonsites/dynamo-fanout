@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.2.6"></a>
+## [0.2.6](https://github.com/jasonsites/dynamo-fanout/compare/v0.2.5...v0.2.6) (2018-02-28)
+
+
+### Bug Fixes
+
+* removes Object.entries ([c7b2624](https://github.com/jasonsites/dynamo-fanout/commit/c7b2624))
+
+
+
 <a name="0.2.5"></a>
 ## [0.2.5](https://github.com/jasonsites/dynamo-fanout/compare/v0.2.4...v0.2.5) (2018-02-28)
 
