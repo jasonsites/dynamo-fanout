@@ -3,7 +3,7 @@
     ["env", { "targets": { "node": "6.10" } }]
   ],
   "plugins": [
-    ["transform-runtime", { "helpers": false, "polyfill": false, "regenerator": true }],
+    ["transform-runtime", { "helpers": false, "polyfill": true, "regenerator": true }],
     "transform-async-to-generator",
     "transform-class-properties",
     "add-module-exports",
