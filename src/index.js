@@ -5,6 +5,7 @@
 import 'source-map-support/register'
 
 import container from './container'
+import { log as logger } from './log'
 
 export const MODULES = {
   etl: 'etl',
@@ -18,9 +19,10 @@ export const MODULES = {
  * @param {Function} done - lambda callback
  */
 export async function handler(e, ctx, done) {
-  const modules = await container.load(MODULES)
-  const log = modules.log.child({ req_id: ctx.awsRequestId })
+  let log = logger
   try {
+    const modules = await container.load(MODULES)
+    log = modules.log.child({ req_id: ctx.awsRequestId })
     const result = await modules.etl.processEvent(e, log)
     log.info({ result })
     done(null, result)
