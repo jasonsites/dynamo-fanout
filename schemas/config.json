@@ -54,6 +54,32 @@
     "kinesis": {
       "type": "object",
       "properties": {
+        "partition": {
+          "type": "object",
+          "default": {},
+          "properties": {
+            "delimiter": {
+              "type": "string",
+              "minLength": 0,
+              "default": ""
+            },
+            "mode": {
+              "enum": [
+                "concat",
+                "first",
+                "keys"
+              ],
+              "default": "keys"
+            },
+            "paths": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
         "target": {
           "type": "object",
           "properties": {
