@@ -11,11 +11,12 @@ export const inject = {
 }
 
 export default function (config) {
-  const { aws: { region }, backoff, kinesis } = config
+  const { aws, backoff, kinesis } = config
 
   // kinesis client options
   const { 'stream-name': StreamName } = kinesis.target
-  const options = { params: { StreamName }, region }
+  const options = { params: { StreamName } }
+  if (aws.region) Object.assign(options, { region: aws.region })
 
   /**
    * Configured kinesis client
