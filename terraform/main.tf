@@ -19,7 +19,6 @@ resource "aws_lambda_function" "dynamo_fanout" {
       "CONFIG_PREFIX" = "${var.config_prefix}"
       "DEBUG"         = "${var.debug}"
       "NODE_ENV"      = "production"
-      "VERSION"       = "${var.version}"
     }
   }
 }

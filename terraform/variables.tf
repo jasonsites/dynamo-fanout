@@ -89,11 +89,6 @@ variable "timeout" {
   default     = "60"
 }
 
-variable "version" {
-  type        = "string"
-  description = "artifact version"
-}
-
 variable "vpc_id" {
   type        = "string"
   description = "vpc id"
