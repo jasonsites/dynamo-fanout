@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.3.2"></a>
+## [0.3.2](https://github.com/jasonsites/dynamo-fanout/compare/v0.3.1...v0.3.2) (2018-09-13)
+
+
+### Bug Fixes
+
+* **terraform:** removes provider for terraform enterprise compatability ([31e85b1](https://github.com/jasonsites/dynamo-fanout/commit/31e85b1))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/jasonsites/dynamo-fanout/compare/v0.3.0...v0.3.1) (2018-07-27)
 
