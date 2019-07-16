@@ -1,10 +1,18 @@
-FROM node:carbon
+FROM node:10
 
-ENV HOME=/home/app
-WORKDIR $HOME
+RUN useradd --user-group --create-home --shell /bin/false app
 
-COPY package.json package-lock.json $HOME/
-RUN npm i
-COPY . $HOME
+ENV APP=/home/app
+WORKDIR $APP
+
+COPY package.json package-lock.json $APP/
+RUN chown -R app:app $APP/*
+USER app
+RUN npm install
+USER root
+COPY . $APP
+RUN chown -R app:app $APP/*
+USER app
+RUN npm run lint
 
 CMD ["npm", "run", "coverage"]
