@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.4](https://github.com/jasonsites/dynamo-fanout/compare/v0.3.3...v0.3.4) (2019-12-07)
+
+
+### Bug Fixes
+
+* **security:** updates packages to remove security vulnerabilities ([f3c4021](https://github.com/jasonsites/dynamo-fanout/commit/f3c4021eb7c969f1c021ad5f87239877c0b4f0f3))
+
 ### [0.3.3](https://github.com/jasonsites/dynamo-fanout/compare/v0.3.2...v0.3.3) (2019-07-16)
 
 
