@@ -30,6 +30,6 @@ const container = new Container({
 })
 
 // register modules
-modules.forEach(m => container.register(m, m.inject.name, m.inject))
+modules.forEach((m) => container.register(m, m.inject.name, m.inject))
 
 export default container

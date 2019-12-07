@@ -2,6 +2,9 @@
  * @module kinesis
  * @overview low level aws kinesis sdk
  */
+
+/* eslint-disable prefer-object-spread */
+
 import AWS from 'aws-sdk'
 import retry from 'retry'
 
