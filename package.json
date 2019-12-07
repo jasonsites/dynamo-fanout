@@ -47,15 +47,15 @@
     "@cludden/ssm-config": "^1.0.3",
     "ajv": "^6.10.2",
     "app-container": "^1.1.2",
-    "aws-sdk": "^2.493.0",
-    "bluebird": "^3.5.5",
+    "aws-sdk": "^2.585.0",
+    "bluebird": "^3.7.2",
     "bunyan": "^1.8.12",
     "es6-error": "^4.1.1",
     "lodash.attempt": "^4.2.0",
     "lodash.get": "^4.4.2",
     "lodash.has": "^4.5.2",
     "retry": "^0.12.0",
-    "source-map-support": "^0.5.12"
+    "source-map-support": "^0.5.16"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -71,16 +71,16 @@
     "babel-register": "^6.26.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^6.0.1",
-    "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.0",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "faker": "^4.1.0",
-    "lodash": "^4.17.14",
-    "mocha": "^6.1.4",
+    "lodash": "^4.17.15",
+    "mocha": "^6.2.2",
     "nyc": "^14.1.1",
-    "sinon": "^7.3.2",
+    "sinon": "^7.5.0",
     "sinon-chai": "^3.3.0",
-    "uglifyjs-webpack-plugin": "^2.1.3",
-    "webpack": "^4.35.3"
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.41.2"
   }
 }

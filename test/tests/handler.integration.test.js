@@ -31,7 +31,7 @@ describe('[INTEGRATION] handler', function () {
   describe('failure scenarios', function () {
     it('fails (error) on invalid dynamo stream message', function () {
       const e = { Records: 'should-fail' }
-      return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
+      return expect(Bluebird.fromCallback((done) => handler(e, {}, done)))
         .to.be.rejectedWith(MalformedEventError)
     })
 
@@ -45,7 +45,7 @@ describe('[INTEGRATION] handler', function () {
       })
       record.eventSource = 'should-fail'
       const e = { Records: [record] }
-      return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
+      return expect(Bluebird.fromCallback((done) => handler(e, {}, done)))
         .to.eventually.deep.equal({ n: 0 })
     })
 
@@ -59,7 +59,7 @@ describe('[INTEGRATION] handler', function () {
       })
       record.dynamodb.StreamViewType = 'should-fail'
       const e = { Records: [record] }
-      return expect(Bluebird.fromCallback(done => handler(e, {}, done)))
+      return expect(Bluebird.fromCallback((done) => handler(e, {}, done)))
         .to.eventually.deep.equal({ n: 0 })
     })
   })
@@ -82,7 +82,7 @@ describe('[INTEGRATION] handler', function () {
         table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
-      return Bluebird.fromCallback(done => handler(e, {}, done))
+      return Bluebird.fromCallback((done) => handler(e, {}, done))
         .then(() => {
           const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
@@ -146,7 +146,7 @@ describe('[INTEGRATION] handler', function () {
         table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
-      return Bluebird.fromCallback(done => handler(e, {}, done))
+      return Bluebird.fromCallback((done) => handler(e, {}, done))
         .then(() => {
           const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
@@ -210,7 +210,7 @@ describe('[INTEGRATION] handler', function () {
         table: DYNAMO_TABLE,
       })
       const e = { Records: [record] }
-      return Bluebird.fromCallback(done => handler(e, {}, done))
+      return Bluebird.fromCallback((done) => handler(e, {}, done))
         .then(() => {
           const { Data, PartitionKey } = stub.lastCall.args[0].Records[0]
           expect(PartitionKey).to.equal(recordId)
