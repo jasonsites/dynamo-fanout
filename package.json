@@ -75,7 +75,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
     "faker": "^4.1.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mocha": "^6.2.2",
     "nyc": "^14.1.1",
     "sinon": "^7.5.0",
