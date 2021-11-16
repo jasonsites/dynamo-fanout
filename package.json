@@ -47,7 +47,7 @@
     "@cludden/ssm-config": "^1.0.3",
     "ajv": "^6.10.2",
     "app-container": "^1.1.2",
-    "aws-sdk": "^2.585.0",
+    "aws-sdk": "^2.814.0",
     "bluebird": "^3.7.2",
     "bunyan": "^1.8.12",
     "es6-error": "^4.1.1",
