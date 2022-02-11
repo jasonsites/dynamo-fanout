@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@cludden/ssm-config": "^1.0.3",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "app-container": "^1.1.2",
     "aws-sdk": "^2.585.0",
     "bluebird": "^3.7.2",
